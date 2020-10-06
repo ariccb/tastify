@@ -1,0 +1,21 @@
+{
+	"folders": [
+		{
+			"name": "rate-my-music-taste",
+			"path": "rate-my-music-taste"
+		},
+		{
+			"name": "rate-my-music-taste-server",
+			"path": "rate-my-music-taste-server"
+		}
+	],
+	"settings": {},
+	"launch": {
+		"compounds": [
+			{
+				"name": "Compound",
+				"configurations": ["Server", "Client"]
+			}
+		]
+	}
+}
