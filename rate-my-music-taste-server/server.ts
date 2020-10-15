@@ -42,27 +42,43 @@ passport.use(
       callbackURL: '/auth/spotify/callback'
     },
     function(accessToken, refreshToken, expires_in, profile, done) {
-      console.log(profile)  
+      console.log(profile)          
     })
     
   )
 
+app.get('/', (req, res)=>{
+  res.redirect('http://localhost:8080')
+}) 
 
-app.get('/auth/spotify', passport.authenticate('spotify'), function(req, res) {
+// @ts-ignore
+app.get('/auth/spotify', passport.authenticate('spotify',{
+  scope: ['user-read-email', 'user-read-private','playlist-read-private','user-top-read','user-library-read','streaming','app-remote-control'], 
+  showDialog: true
+}), function(req, res) {
   // The request will be redirected to spotify for authentication, so this
   // function will not be called.
 });
 
-app.get(
-  '/auth/spotify/callback',
-  passport.authenticate('spotify', { failureRedirect: '/login' }),
+app.get('/auth/spotify/callback', (req, res, next) => {
+  passport.authenticate('spotify', { failureRedirect: '/' })
+  //next()
+},
+
   function(req, res) {
     // Successful authentication, redirect home.
-    res.redirect('/');
+    console.log('HERE')
+    res.redirect('/')
   }
 );
 
+passport.serializeUser((user, done) => {
+  done(null, user)
+})
 
+passport.deserializeUser((user, done) => {
+  done(null, user)
+})
 
  
 

@@ -16,7 +16,7 @@
                 Welcome to Rate My Music Taste
             </h1>
 
-            <v-btn @click="run_authenticate">
+            <v-btn @click="run_spotify_authenticate">
                 
                 Login To Spotify
 
@@ -44,7 +44,7 @@ export default ({
     },
 
     methods: {
-        run_authenticate(){
+        run_spotify_authenticate(){
             let href = 'http://localhost:3000/auth/spotify'
             window.location.href = href
 
