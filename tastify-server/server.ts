@@ -22,8 +22,8 @@ app.use(cors(
   {origin: [
   'http://localhost:8080',
   'http://localhost:8080/*',
-  'http://localhost:1337',  
-  'http://localhost:1337/*'
+  'http://localhost:3000',  
+  'http://localhost:3000/*'
 
 ]}
 ))
@@ -33,7 +33,7 @@ passport.use(
     {
       clientID: client_id,
       clientSecret: client_secret,
-      callbackURL: '/auth/spotify/callback'
+      callbackURL: 'http://localhost:3000/auth/spotify/callback/'
     },
     function(accessToken, refreshToken, expires_in, profile, done) {
       console.log(profile)          
@@ -60,7 +60,7 @@ app.get('/auth/spotify/callback',
   passport.authenticate('spotify', { failureRedirect: '/' }),
   function(req, res) {
     // Successful authentication, redirect home.
-    console.log('HERE')
+    console.log('Successful Authentication!')
     res.redirect('/')
   }
 )
@@ -78,7 +78,7 @@ passport.deserializeUser((user, done) => {
 
  if (port == undefined)
  {
-     port = 1337
+     port = 3000
  }
 app.listen(port)
 console.log('listening on port ' + port)
