@@ -1,5 +1,5 @@
 {
-  "name": "yappinserver",
+  "name": "tastify-server",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -22,6 +22,7 @@
     "passport-spotify": "^1.1.0",
     "save-dev": "0.0.1-security",
     "ts-node": "^9.0.0",
+    "typecript": "0.0.1-security",
     "typescript": "^4.0.2"
   },
   "devDependencies": {
