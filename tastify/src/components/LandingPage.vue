@@ -45,7 +45,7 @@ export default ({
 
     methods: {
         run_spotify_authenticate(){
-            let href = 'http://localhost:3000/auth/spotify'
+            let href = 'http://localhost:1337/auth/spotify'
             window.location.href = href
 
         }
