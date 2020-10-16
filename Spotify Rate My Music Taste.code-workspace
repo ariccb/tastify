@@ -1,12 +1,10 @@
 {
 	"folders": [
 		{
-			"name": "rate-my-music-taste",
-			"path": "rate-my-music-taste"
+			"path": "tastify"
 		},
 		{
-			"name": "rate-my-music-taste-server",
-			"path": "rate-my-music-taste-server"
+			"path": "tastify-server"
 		}
 	],
 	"settings": {},

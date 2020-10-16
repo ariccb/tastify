@@ -42,7 +42,11 @@ passport.use(
       callbackURL: '/auth/spotify/callback'
     },
     function(accessToken, refreshToken, expires_in, profile, done) {
-      console.log(profile)          
+      // To keep the example simple, the user's spotify profile is returned to
+      // represent the logged-in user. In a typical application, you would want
+      // to associate the spotify account with a user record in your database,
+      // and return that user instead.
+      console.log(profile)
     })
     
   )
