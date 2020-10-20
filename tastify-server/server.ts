@@ -61,7 +61,9 @@ app.get('/auth/spotify/callback',
   function(req, res) {
     // Successful authentication, redirect home.
     console.log('Successful Authentication!')
+    // need to assign a data variable "successful-login" and have a app.get request on the client side to tell if it did or not, THEN route to /about (or mainpage)
     res.redirect('/')
+    
   }
 )
 

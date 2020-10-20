@@ -1,5 +1,6 @@
 <template>
-<v-container>
+<div class="landingpage">        
+    <v-main>
     <v-row class="text-center">
         <v-col
             cols="12"
@@ -13,22 +14,30 @@
 
         <v-col class="mb-4">
             <h1 class="display-2 font-weight-bold mb-3">
-                Welcome to Rate My Music Taste
+                Welcome to Tastify
             </h1>
+            <v-spacer>
+                
+            </v-spacer>
+            <h3>
+                Where you can 'taste-test' your own and other Spotify user's playlists
+            </h3>
 
             <v-btn @click="run_spotify_authenticate">
-                
+
                 Login To Spotify
 
             </v-btn>
 
         </v-col>
     </v-row>
-</v-container>
+</v-main>
+</div>
+
 </template>
 
 <script lang="ts">
-import Authenticate from './Authenticate.vue'
+import Authenticate from '../components/Authenticate.vue'
 import axios from 'axios'
 
 export default ({
@@ -39,12 +48,16 @@ export default ({
 
     data: () => {
         return {
-            dialog: false
+            dialog: false,
+            // items: [
+            //     { title: 'My Tastify'},
+            //     { title: 'Tastify Friends'}
+            // ]
         }
     },
 
     methods: {
-        run_spotify_authenticate(){
+        run_spotify_authenticate() {
             let href = 'http://localhost:3000/auth/spotify'
             window.location.href = href
 
