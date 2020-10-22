@@ -49,10 +49,7 @@ export default ({
     data: () => {
         return {
             dialog: false,
-            // items: [
-            //     { title: 'My Tastify'},
-            //     { title: 'Tastify Friends'}
-            // ]
+           
         }
     },
 
