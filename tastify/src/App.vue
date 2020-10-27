@@ -78,7 +78,8 @@
 </style>
 
 <script lang="ts">
-import LandingPage from './views/LandingPage.vue';
+import LandingPage from './views/LandingPage.vue'
+import axios from 'axios'
 
 export default ({
     name: 'App',
@@ -88,7 +89,11 @@ export default ({
     },
 
     data: () => {
-        return {}
+        return {
+            users: [],
+        }
     },
+
+    
 });
 </script>

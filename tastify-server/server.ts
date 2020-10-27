@@ -8,12 +8,12 @@ import cors from 'cors'
 import bodyParser from 'body-parser'
 import passport from 'passport'
 import SpotifyStrategy from 'passport-spotify'
-import {} from 'dotenv/config'
+import { } from 'dotenv/config'
+import {UserSchema} from './classes/Schema'
 // import SpotifyUser from './classes/UserSpotify'
 
 const app = express()
 app.use(passport.initialize())
-let users = []
 let jsonParser = bodyParser.json()
 let port
 // load the HTTP library
@@ -35,48 +35,93 @@ app.use(cors(
   }
 ))
 
-mongoose.connect('mongodb://localhost:27017/local', {
+let connection = mongoose.connect('mongodb://localhost:27017/local', {
   useNewUrlParser: true,
   useUnifiedTopology: true,
   useFindAndModify: false,
   useCreateIndex: true
 })
 
+connection.then((db)=>{
+  // const Playlist = db.model('Playlist', PlaylistSchema)
+  const User = db.model('User',UserSchema)
 
 
-passport.use(
-  new SpotifyStrategy.Strategy(
-    {
-      clientID: client_id,
-      clientSecret: client_secret,
-      callbackURL: 'http://localhost:3000/auth/spotify/callback/'
-    },
-    function (accessToken, refreshToken, expires_in, profile, done) {
-      //@ts-ignore
-      spotifyID = profile.id
-      console.log(spotifyID)
+  passport.use(
+    new SpotifyStrategy.Strategy(
+      {
+        clientID: client_id,
+        clientSecret: client_secret,
+        callbackURL: 'http://localhost:3000/auth/spotify/callback/'
+      },
+      function (accessToken, refreshToken, expires_in, profile, done) {
+        //@ts-ignore
+        
+        // below is the code that was working to get the playlists from spotify -
+        // but i think that should be outside of this passport auth function
+        //@ts-ignore
+        spotifyID = profile.id
+        console.log(spotifyID)
+        console.log(profile)
+
+        //findoneandupdate()
+        
 
 
-      console.log(profile)
-      console.log(accessToken)
-      //@ts-ignore
-      axios.get('https://api.spotify.com/v1/me/playlists',
-        {
-          headers:
-            { Authorization: 'Bearer ' + accessToken }
-        }).then((val) => {
-          // val accesses the current user's playlists as objects
-          val.data.items[0]
-
-          console.log(val)
-        }).catch((res) => {
-          console.log(res.response)         
+        let user = new User({
+          //@ts-ignore
+          name: profile.displayName,
+          accesstoken: accessToken,
+          refreshtoken: refreshToken,
+          //@ts-ignore
+          id: profile.id,
+          //@ts-ignore
+          uri: profile.uri,
+          //@ts-ignore
+          profileUrl: profile.profileUrl,
+          //@ts-ignore
+          country: profile.country,
+          //@ts-ignore
+          images: profile.photos,
+          //@ts-ignore
+          playlists: profile.playlists
+  
         })
-      //@ts-ignore
-      done(null, profile)
-    })
 
-)
+        user.save()
+  
+  
+        console.log(profile)
+        console.log(accessToken)
+        
+        axios.get('https://api.spotify.com/v1/me/playlists',
+          {
+            headers:
+            { Authorization: 'Bearer ' + accessToken }
+          }).then((val) => {
+            // val accesses the current user's playlists as objects
+            val.data.items
+  
+            console.log(val)
+          }).catch((res) => {
+            console.log(res.response)         
+          })
+        //@ts-ignore
+        done(null, profile)
+      })
+  )
+  
+  app.post('/user/:userid', jsonParser, (req, res) =>{
+    User.findOne({'id': req.params.userid}, 'images name', function(err, user) { //look up express variables
+      res.send(user)
+    })        
+  })
+
+
+
+})
+
+
 
 app.get('/', (req, res) => {
   res.redirect('http://localhost:8080')
