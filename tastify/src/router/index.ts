@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import VueRouter, { RouteConfig } from 'vue-router'
 import LandingPage from '../views/LandingPage.vue'
+import MainPage from '../views/MainPage.vue'
 
 Vue.use(VueRouter)
 
@@ -11,13 +12,11 @@ const routes: Array<RouteConfig> = [
     component: LandingPage
   },
   {
-    path: '/mainpage',
+    path: '/MainPage',
     name: 'MainPage',
-    // route level code-splitting
-    // this generates a separate chunk (mainpage.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "mainpage" */ '../views/MainPage.vue')
+    component: MainPage
   }
+  
 ]
 
 const router = new VueRouter({

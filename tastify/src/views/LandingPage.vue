@@ -24,6 +24,7 @@
             </h3>
 
             <v-btn @click="run_spotify_authenticate">
+                
 
                 Login To Spotify
 
@@ -37,13 +38,12 @@
 </template>
 
 <script lang="ts">
-import Authenticate from '../components/Authenticate.vue'
 import axios from 'axios'
 
 export default ({
     name: 'LandingPage',
     components: {
-        Authenticate,
+        
     },
 
     data: () => {

@@ -21,23 +21,6 @@
         </v-row>
     </v-container>
 
-    <v-container class="grey lighten-5">
-        <v-row
-            no-gutters
-            style="height: 150px;">
-            <v-col
-                v-for="align in alignments"
-                :key="align"
-                :align-self="align">
-                <v-card
-                    class="pa-2"
-                    outlined
-                    tile>
-                    One of three columns
-                </v-card>
-            </v-col>
-        </v-row>
-    </v-container>
     <div id="app">
         <v-app id="inspire">
             <div class="text-center">
@@ -98,13 +81,13 @@
 <script lang="ts">
 import axios from 'axios'
 
-export default ({
-    name: 'LandingPage',
+export default {
+    name: 'MainPage',
     components: {
 
     },
 
-    data: () => {
+    data(){
         return {
             dialog: false,
             alignments: [
@@ -112,27 +95,35 @@ export default ({
                 'center',
                 'end',
             ],
-            users: [],
+            mainUser: [
+                
+            ],
 
         }
     },
-
     methods: {
-      
-        // updateUser(){
-        //     users = axios.get('http://localhost:3000/user/:userid').then(res) => {
-        //       console.log(this.users)
-        //     }
-        // },
+        
+
     },
+
     async mounted(){
-      let users = await axios.post('http://localhost:3000/user/abouwers').then((res) => {
-              console.log(res)
+      let users = await axios.get('http://localhost:3000/user').then((res) => {              
               console.log(res.data)
+              let user = {
+                  name: res.data.name,
+                  id: res.data._id,
+                  images: res.data.images,
+                  country: res.data.country,
+                  url: res.data.url,
+                  playlists: res.data.playlists[0].items
+              }
+              this.mainUser.push(user) 
+              
+              
       }
       )
     }
     
     
-})
+}
 </script>

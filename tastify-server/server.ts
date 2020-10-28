@@ -6,10 +6,11 @@ import axios from 'axios'
 import mongoose from 'mongoose'
 import cors from 'cors'
 import bodyParser from 'body-parser'
-import passport from 'passport'
+import passport, { use } from 'passport'
 import SpotifyStrategy from 'passport-spotify'
 import { } from 'dotenv/config'
-import {UserSchema} from './classes/Schema'
+import { UserSchema } from './classes/Schema'
+import { resolveModuleName } from 'typescript'
 // import SpotifyUser from './classes/UserSpotify'
 
 const app = express()
@@ -42,9 +43,9 @@ let connection = mongoose.connect('mongodb://localhost:27017/local', {
   useCreateIndex: true
 })
 
-connection.then((db)=>{
+connection.then((db) => {
   // const Playlist = db.model('Playlist', PlaylistSchema)
-  const User = db.model('User',UserSchema)
+  const User = db.model('User', UserSchema)
 
 
   passport.use(
@@ -56,68 +57,74 @@ connection.then((db)=>{
       },
       function (accessToken, refreshToken, expires_in, profile, done) {
         //@ts-ignore
-        
+
         // below is the code that was working to get the playlists from spotify -
         // but i think that should be outside of this passport auth function
         //@ts-ignore
         spotifyID = profile.id
         console.log(spotifyID)
-        console.log(profile)
 
         //findoneandupdate()
-        
 
-
-        let user = new User({
-          //@ts-ignore
-          name: profile.displayName,
-          accesstoken: accessToken,
-          refreshtoken: refreshToken,
-          //@ts-ignore
-          id: profile.id,
-          //@ts-ignore
-          uri: profile.uri,
-          //@ts-ignore
-          profileUrl: profile.profileUrl,
-          //@ts-ignore
-          country: profile.country,
-          //@ts-ignore
-          images: profile.photos,
-          //@ts-ignore
-          playlists: profile.playlists
-  
-        })
-
-        user.save()
-  
-  
-        console.log(profile)
-        console.log(accessToken)
         
         axios.get('https://api.spotify.com/v1/me/playlists',
           {
             headers:
-            { Authorization: 'Bearer ' + accessToken }
+              { Authorization: 'Bearer ' + accessToken },
           }).then((val) => {
             // val accesses the current user's playlists as objects
-            val.data.items
-  
-            console.log(val)
+            console.log(val)      
+            
+            let query = { 'id': spotifyID }
+            let update = {
+              //@ts-ignore
+              name: profile.displayName,
+              accesstoken: accessToken,
+              refreshtoken: refreshToken,
+              //@ts-ignore
+              id: profile.id,
+              //@ts-ignore
+              url: profile.profileUrl,
+              //@ts-ignore
+              country: profile.country,
+              //@ts-ignore
+              images: profile.photos,
+              playlists: val.data
+            }
+            console.log(val.data)
+
+            User.findOneAndUpdate(query, update, { upsert: true }, function (err, doc) {
+              if (err) {
+                console.log(err)
+              }
+            })
+
           }).catch((res) => {
-            console.log(res.response)         
+            console.log(res.response)
           })
+
+        
+
+        console.log(profile)
+
+
         //@ts-ignore
         done(null, profile)
       })
   )
-  
-  app.post('/user/:userid', jsonParser, (req, res) =>{
-    User.findOne({'id': req.params.userid}, 'images name', function(err, user) { //look up express variables
+
+  // app.post('/user/:userid', jsonParser, (req, res) =>{
+  //   User.findOne({'id': req.params.userid}, 'images name', function(err, user) { //look up express variables
+  //     res.send(user)
+  //   })        
+  // })
+
+  app.get('/user', jsonParser, (req, res) => {
+    User.findOne({ 'id': spotifyID }, 'images name id country url playlists', function (err, user) { //look up express variables
+      console.log(spotifyID)
       res.send(user)
-    })        
+    })
   })
-
-
 
 })
 

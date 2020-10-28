@@ -20,12 +20,17 @@
 
                 <v-app-bar-nav-icon></v-app-bar-nav-icon>
 
-                <v-toolbar-title>Tastify</v-toolbar-title>
+                <v-toolbar-title>Tastify
+                    <v-card-subtitle>
+                        {{ mainUser[0].name }}
+                    </v-card-subtitle>
+                </v-toolbar-title>
 
                 <v-spacer></v-spacer>
 
                 <v-btn icon>
                     <v-icon>mdi-heart
+                        
                         <!-- insert spotify account picture -->
                     </v-icon>
                 </v-btn>
@@ -33,10 +38,10 @@
                 <template v-slot:extension>
                     <v-tabs align-with-title>
                         <v-tab>
-                            <router-link to="/">LandingPage</router-link>
+                            <router-link to="/">Login</router-link>
                         </v-tab>
                         <v-tab>
-                            <router-link to="/mainpage">MainPage</router-link>
+                            <router-link to="/MainPage">Playlists</router-link>
                         </v-tab>
                     </v-tabs>
                 </template>
@@ -90,10 +95,31 @@ export default ({
 
     data: () => {
         return {
-            users: [],
+            mainUser: [
+                
+            ],
+                        
         }
     },
 
+     async mounted(){
+      let users = await axios.get('http://localhost:3000/user').then((res) => {              
+            //   console.log(res.data)
+              let user = {
+                  name: res.data.name,
+                  id: res.data._id,
+                  images: res.data.images,
+                  country: res.data.country,
+                  url: res.data.url,
+                  playlists: res.data.playlists[0].items
+              }
+              this.mainUser.push(user) 
+              console.log('um i think this is working on App.vue')
+              console.log(user)
+              
+      })
+     }
+})
     
-});
+
 </script>
