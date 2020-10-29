@@ -57,7 +57,7 @@
                     class="ml-0"
                     :class="{ 'mr-3': $vuetify.breakpoint.mdAndUp }"
                   >
-                    <v-btn icon>
+                    <v-btn icon v-if="loaded">
                       <v-icon>mdi-fast-forward</v-icon>
                     </v-btn>
                   </v-list-item-icon>
@@ -81,11 +81,24 @@ export default {
   data() {
     return {
       dialog: false,
+      loaded: false,
       alignments: ["start", "center", "end"],
       mainUser: [],
+      songList: [{
+        trackname: "",
+        trackArtist: "",
+        trackTime: "",
+        trackAlbum: "",
+
+
+
+      }],
     };
   },
-  methods: {},
+  methods: {
+    // method for gathering 10 songs from playlist and playing 15 seconds of each song
+
+  },
 
   async mounted() {
     let users = await axios.get("http://localhost:3000/user").then((res) => {
@@ -99,6 +112,7 @@ export default {
         playlists: res.data.playlists[0].items,
       }
       this.mainUser.push(user)
+      this.loaded = true
     })
   },
 }

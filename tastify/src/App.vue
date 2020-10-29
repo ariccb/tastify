@@ -24,7 +24,7 @@
 
           <v-toolbar-title
             >Tastify
-            <v-card-subtitle>
+            <v-card-subtitle v-if="loaded">
               {{ mainUser[0].name }}
             </v-card-subtitle>
           </v-toolbar-title>
@@ -99,6 +99,7 @@ export default {
   data() {
     return {
       mainUser: [],
+      loaded: false
     };
   },
 
@@ -116,6 +117,7 @@ export default {
       this.mainUser.push(user);
       console.log("um i think this is working on App.vue");
       console.log(user);
+      this.loaded = true
     })
   },
 }
